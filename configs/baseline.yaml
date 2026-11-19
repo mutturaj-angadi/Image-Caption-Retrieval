@@ -1,0 +1,24 @@
+# Multi-response linear regression baseline (mean GloVe caption vector -> VGG fc7 image vector).
+name: baseline_linreg
+seed: 42
+artifacts_dir: artifacts
+
+model:
+  type: baseline
+  l2: [0.1, 1.0, 10.0, 100.0, 1000.0]   # ridge strengths; the best one on the VALIDATION split is kept
+  word_dim: 300
+
+data:
+  processed_dir: data/processed
+  features_dir: data/processed/features
+  glove_path: data/raw/glove/glove.6B.300d.txt
+  max_caption_len: 32
+  image_feature_dim: 4096
+
+train:
+  selection_metric: t2i_rsum
+  val_subset_images: 0      # baseline selection uses the whole validation split
+
+index:
+  split: test
+  faiss_min_size: 20000

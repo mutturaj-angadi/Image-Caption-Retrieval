@@ -1,0 +1,63 @@
+{
+  "name": "lstm_glove",
+  "model_type": "lstm",
+  "split": "val",
+  "protocol": "full",
+  "metrics": {
+    "num_images": 100,
+    "num_captions": 500,
+    "t2i_R@1": 48.199999999999996,
+    "t2i_R@5": 87.8,
+    "t2i_R@10": 97.2,
+    "t2i_mean_rank": 2.878,
+    "t2i_median_rank": 2.0,
+    "i2t_R@1": 56.00000000000001,
+    "i2t_R@5": 84.0,
+    "i2t_R@10": 94.0,
+    "i2t_mean_rank": 3.05,
+    "i2t_median_rank": 1.0,
+    "t2i_rsum": 233.2,
+    "i2t_rsum": 234.0
+  },
+  "num_images": 100,
+  "num_captions": 500,
+  "embedding_dim": 256,
+  "encode_seconds": 0.065,
+  "query_latency_ms_median": 1.199,
+  "latency_setup": "single caption query vs 100 images, brute-force NumPy, Intel64 Family 6 Model 170 Stepping 4, GenuineIntel, device=cpu, median of 50 queries",
+  "dataset": {
+    "name": "MS-COCO 2014 captions",
+    "split_source": "Karpathy & Fei-Fei split (restval merged into train)",
+    "synthetic": false,
+    "is_subset": true,
+    "subset_limits": {
+      "train": 10000,
+      "val": 100,
+      "test": 100
+    },
+    "seed": 42,
+    "captions_per_image": 5,
+    "vocab_min_freq": 5,
+    "vocab_size": 3356,
+    "num_images": {
+      "train": 10000,
+      "val": 100,
+      "test": 100
+    },
+    "images_root": "C:/SEM 5/ML Lab Submission/Image Caption/neural-caption-image-retrieval/data/raw/coco"
+  },
+  "training_seconds": 29.7,
+  "environment": {
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 170 Stepping 4, GenuineIntel",
+    "cpu_count": 18,
+    "numpy": "2.4.6",
+    "torch": "2.14.1+cpu",
+    "torchvision": "0.29.1+cpu",
+    "cuda_available": false,
+    "gpu": null,
+    "faiss": false
+  },
+  "note": "t2i = caption -> image retrieval (what the web app does); i2t = image -> caption retrieval. Ties are ranked pessimistically."
+}

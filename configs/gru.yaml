@@ -1,0 +1,40 @@
+# GRU + GloVe joint embedding model (main neural model, research-inspired).
+name: gru_glove
+seed: 42
+artifacts_dir: artifacts
+
+model:
+  type: gru                 # baseline | gru | lstm
+  embedding_dim: 1024       # size of the shared image-text space (paper: 1,024)
+  word_dim: 300             # GloVe dimension
+  hidden_dim: 1024          # recurrent hidden size
+  num_layers: 1
+  dropout: 0.0
+  pretrained_embeddings: true   # false -> random init (ablation: configs/gru_no_glove.yaml)
+  freeze_embeddings: false      # true -> keep GloVe fixed during training
+
+data:
+  processed_dir: data/processed
+  features_dir: data/processed/features
+  glove_path: data/raw/glove/glove.6B.300d.txt   # null -> deterministic synthetic vectors (smoke tests only)
+  max_caption_len: 32
+  image_feature_dim: 4096
+
+train:
+  batch_size: 128
+  epochs: 30
+  optimizer: adam           # adam | adamw | sgd
+  lr: 0.0002
+  weight_decay: 0.0
+  grad_clip: 2.0            # 0 disables clipping
+  margin: 0.2               # ranking-loss margin
+  max_violation: false      # false: sum over negatives (original formulation); true: hardest negative only
+  patience: 5               # early stopping on the validation metric
+  selection_metric: t2i_rsum   # validation metric used for checkpoint selection (never the test set)
+  val_subset_images: 1000   # validation images used for per-epoch model selection (0 = all)
+  device: auto              # auto | cpu | cuda
+  resume: false             # true -> continue from artifacts/<name>/last.pt
+
+index:
+  split: test               # corpus that is indexed for the web app
+  faiss_min_size: 20000     # use FAISS only above this many images (and only if installed)

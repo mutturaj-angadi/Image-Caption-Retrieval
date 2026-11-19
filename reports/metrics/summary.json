@@ -1,0 +1,94 @@
+{
+  "split": "test",
+  "protocol": "full",
+  "results": {
+    "baseline_linreg": {
+      "label": "Linear regression baseline",
+      "status": "measured",
+      "metrics": {
+        "num_images": 100,
+        "num_captions": 500,
+        "t2i_R@1": 39.0,
+        "t2i_R@5": 78.8,
+        "t2i_R@10": 88.8,
+        "t2i_mean_rank": 4.426,
+        "t2i_median_rank": 2.0,
+        "i2t_R@1": 53.0,
+        "i2t_R@5": 84.0,
+        "i2t_R@10": 94.0,
+        "i2t_mean_rank": 3.63,
+        "i2t_median_rank": 1.0,
+        "t2i_rsum": 206.6,
+        "i2t_rsum": 231.0
+      },
+      "num_images": 100,
+      "num_captions": 500,
+      "latency_ms": 0.221,
+      "train_seconds": 3.2,
+      "dataset": "MS-COCO 2014 captions",
+      "synthetic": false,
+      "subset": true,
+      "history_file": "C:/SEM 5/ML Lab Submission/Image Caption/neural-caption-image-retrieval/artifacts/baseline_linreg/history.json"
+    },
+    "gru_random_init": {
+      "label": "GRU (random init)",
+      "status": "pending"
+    },
+    "gru_glove": {
+      "label": "GRU + GloVe",
+      "status": "measured",
+      "metrics": {
+        "num_images": 100,
+        "num_captions": 500,
+        "t2i_R@1": 17.2,
+        "t2i_R@5": 55.800000000000004,
+        "t2i_R@10": 74.6,
+        "t2i_mean_rank": 9.248,
+        "t2i_median_rank": 5.0,
+        "i2t_R@1": 18.0,
+        "i2t_R@5": 51.0,
+        "i2t_R@10": 69.0,
+        "i2t_mean_rank": 10.01,
+        "i2t_median_rank": 5.0,
+        "t2i_rsum": 147.6,
+        "i2t_rsum": 138.0
+      },
+      "num_images": 100,
+      "num_captions": 500,
+      "latency_ms": 0.81,
+      "train_seconds": 2.3,
+      "dataset": "MS-COCO 2014 captions",
+      "synthetic": false,
+      "subset": true,
+      "history_file": "C:/SEM 5/ML Lab Submission/Image Caption/neural-caption-image-retrieval/artifacts/gru_glove/history.json"
+    },
+    "lstm_glove": {
+      "label": "LSTM + GloVe",
+      "status": "measured",
+      "metrics": {
+        "num_images": 100,
+        "num_captions": 500,
+        "t2i_R@1": 21.6,
+        "t2i_R@5": 55.00000000000001,
+        "t2i_R@10": 72.2,
+        "t2i_mean_rank": 8.91,
+        "t2i_median_rank": 5.0,
+        "i2t_R@1": 23.0,
+        "i2t_R@5": 60.0,
+        "i2t_R@10": 74.0,
+        "i2t_mean_rank": 8.35,
+        "i2t_median_rank": 4.0,
+        "t2i_rsum": 148.8,
+        "i2t_rsum": 157.0
+      },
+      "num_images": 100,
+      "num_captions": 500,
+      "latency_ms": 0.599,
+      "train_seconds": 2.3,
+      "dataset": "MS-COCO 2014 captions",
+      "synthetic": false,
+      "subset": true,
+      "history_file": "C:/SEM 5/ML Lab Submission/Image Caption/neural-caption-image-retrieval/artifacts/lstm_glove/history.json"
+    }
+  }
+}

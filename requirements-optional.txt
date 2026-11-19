@@ -1,0 +1,5 @@
+# Optional: FAISS speeds up nearest-neighbour search for large corpora.
+# The project works without it (exact NumPy search is used automatically).
+# Wheels are not published for every Windows / Python combination; if this
+# install fails, simply skip it.
+faiss-cpu>=1.8

@@ -1,0 +1,24 @@
+# Runtime dependencies. Ranges are used because exact wheels differ per OS / Python / GPU.
+# After your first successful install, freeze what you actually ran with:
+#   pip freeze > requirements.lock.txt
+# Tested target: Python 3.10 - 3.12 on Windows 11 (CPU or NVIDIA GPU).
+
+numpy>=1.26,<3
+pillow>=10.0
+pyyaml>=6.0
+matplotlib>=3.8
+tqdm>=4.66
+
+# Deep learning. For an NVIDIA GPU install the CUDA build of torch first,
+# following https://pytorch.org/get-started/locally/ , then run this file.
+torch>=2.2
+torchvision>=0.17
+
+# Backend
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+
+# Report PDF generation (scripts/build_report.py) and slides (scripts/build_slides.py)
+reportlab>=4.0
+python-pptx>=0.6.23

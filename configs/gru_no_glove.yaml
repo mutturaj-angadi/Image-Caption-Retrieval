@@ -1,0 +1,40 @@
+# Ablation: GRU with randomly initialised word embeddings (no GloVe).
+name: gru_random_init
+seed: 42
+artifacts_dir: artifacts
+
+model:
+  type: gru
+  embedding_dim: 1024
+  word_dim: 300
+  hidden_dim: 1024
+  num_layers: 1
+  dropout: 0.0
+  pretrained_embeddings: false
+  freeze_embeddings: false
+
+data:
+  processed_dir: data/processed
+  features_dir: data/processed/features
+  glove_path: null
+  max_caption_len: 32
+  image_feature_dim: 4096
+
+train:
+  batch_size: 128
+  epochs: 30
+  optimizer: adam
+  lr: 0.0002
+  weight_decay: 0.0
+  grad_clip: 2.0
+  margin: 0.2
+  max_violation: false
+  patience: 5
+  selection_metric: t2i_rsum
+  val_subset_images: 1000
+  device: auto
+  resume: false
+
+index:
+  split: test
+  faiss_min_size: 20000
