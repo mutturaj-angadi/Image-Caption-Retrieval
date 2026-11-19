@@ -11,5 +11,5 @@ export const INSTITUTION = "PES University";
 
 export const TEAM: TeamMember[] = [
   { name: "", srn: "", contribution: "" },
-  // { name: "Full Name", srn: "PES1UG24XXNNN", contribution: "e.g. model training and evaluation" },
+  {name:"Mutturaj Angadi",srn:"PES1UG24AM439"},
 ];
