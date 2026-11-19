@@ -1,7 +1,6 @@
-# NeuralSeek — Neural Caption–Image Retrieval
+# Image Caption Retrieval
 
-**Text-to-image search using deep learning.** Type a sentence such as *"a dog running through snow"* and the
-system ranks indexed images by how well they match, by mapping captions and images into one shared embedding space.
+NeuralSeek is this project's text-to-image search application. Type a sentence such as *"a dog running through snow"* and the system ranks indexed images by mapping captions and images into a shared embedding space.
 
 Course project: UE24CS352A — Machine Learning Mini-Project. Inspired by the paper *Neural Caption–Image Retrieval*
 (MS-COCO, VGG-19 fc7, GloVe, GRU/LSTM, margin ranking loss, Recall@K and mean rank).
@@ -35,15 +34,35 @@ Pytest uses `.pytest-tmp/` under the repository to avoid Windows temp-directory 
 - React + TypeScript + Tailwind UI: Search, Models, Evaluation, About.
 - Synthetic smoke-test mode (no download) so everything can be exercised in minutes.
 
+## Project objectives
+
+- Retrieve images from a natural-language caption by comparing image and text representations in a shared embedding space.
+- Implement and compare a linear-regression baseline with GRU and LSTM text encoders using the same evaluation pipeline.
+- Make the data preparation, training, evaluation and retrieval steps reproducible, while keeping test-set evaluation separate from model selection.
+- Provide a browser interface and API for searching available indexed images and inspecting model and evaluation metadata.
+
+These objectives describe the code in this repository. Real MS-COCO experiments still need to be run locally; the pending-results and verification notes below distinguish software smoke checks from research results.
+
 ## Architecture
 
+```mermaid
+flowchart LR
+    C[Caption query] --> T[Tokenize with model vocabulary]
+    T --> E[GRU or LSTM text encoder]
+    E --> TN[Project and L2-normalize]
+    I[Dataset images] --> V[VGG-19 fc7 features, cached]
+    V --> IP[Image projection and L2-normalize]
+    IP --> IDX[Image index]
+    TN --> COS[Cosine similarity and top-K ranking]
+    IDX --> COS
+    UI[React and TypeScript browser UI] --> API[FastAPI]
+    API --> S[SearchService]
+    S --> COS
+    COS --> API
+    API --> UI
 ```
-Caption ─► tokens ─► GloVe-initialised embedding ─► GRU / LSTM ─► linear ─► L2-normalise ─┐
-                                                                                           ├─► cosine ─► top-K
-Image ─► VGG-19 fc7 (4096-d, cached) ──────────────► linear ───────► L2-normalise ─► index ┘
-                              training signal: hinge ranking loss on matching vs. mismatching pairs
-Browser (React) ─► FastAPI (/api/search) ─► SearchService ─► retriever + ImageIndex ─► ranked images
-```
+
+During training, matching image-caption pairs are pulled together and mismatched pairs separated with a margin ranking loss. The linear-regression baseline instead predicts image features from mean word vectors. The browser search path uses the selected retriever and its prebuilt image index.
 
 Details: [docs/architecture.md](docs/architecture.md), [docs/methodology.md](docs/methodology.md).
 
@@ -73,8 +92,8 @@ winget install -e --id Git.Git
 
 # 2. Get the code and create a virtual environment
 cd $HOME\Documents
-# (unzip the project here, or: git clone <your-repo-url>)
-cd neural-caption-image-retrieval
+git clone https://github.com/mutturaj-angadi/Image-Caption-Retrieval.git
+cd Image-Caption-Retrieval
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1          # if blocked: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 python -m pip install --upgrade pip
@@ -86,6 +105,9 @@ python -m pip install --upgrade pip
 pip install -r requirements.lock.txt
 pip install -r requirements-optional.txt     # optional: FAISS; ignore errors if no wheel exists for your Python
 Copy-Item .env.example .env                  # optional configuration
+cd frontend
+npm ci                                       # install the locked frontend dependencies
+cd ..
 ```
 
 The frontend uses Node.js 20.19+ or 22.12+ (Vite 8 requirement). CPU-only is fine for the baseline, for training on cached features and for the web app. The only slow step on CPU is
@@ -212,9 +234,26 @@ See [docs/troubleshooting.md](docs/troubleshooting.md).
 - Deployment steps for a Vercel static frontend and Render backend: [docs/deployment.md](docs/deployment.md).
 - CI checks Python tests and frontend types, tests, and production build without downloading datasets or requiring a GPU.
 
+## Application workflow
+
+1. Prepare the dataset metadata and vocabulary, then extract/cache image features (or use the synthetic smoke workspace).
+2. Train a baseline or neural model, evaluate it, and build that model's retrieval index. These steps create files under `artifacts/`, `data/processed/` and `reports/`.
+3. Start the FastAPI backend and Vite development server in separate terminals. The Vite server proxies `/api` and `/health` requests to the backend by default.
+4. On the Search page, enter a caption and choose a model and result count. The API encodes the query, ranks indexed images by cosine similarity, and returns image ids, available captions and scores. Scores are ranking similarities, not probabilities.
+5. The Models and Evaluation pages display metadata and recorded evaluation results when present. The synthetic quick-start is visibly labelled and is for pipeline checks only.
+
+## Future enhancements
+
+- Add a separately labelled pretrained CLIP retriever for comparison with the project models.
+- Improve handling of negation, object counts, spatial relations and longer context in text queries.
+- Add larger-scale approximate indexing and production deployment controls such as authentication and rate limiting.
+- Capture and document representative application screenshots after running the app with a prepared dataset.
+
+These are possible extensions; they are not implemented features.
+
 ## Team
 
-Fill in names, SRNs and contributions in `frontend/src/team.ts` and `reports/final_report.md`.
+The About page reads team entries from `frontend/src/team.ts`. The repository currently names **Mutturaj Angadi**; the remaining team fields are placeholders to be completed by the project team. Keep contributor names and details in sync with `reports/final_report.md` when completing them.
 
 ## References and licensing
 
